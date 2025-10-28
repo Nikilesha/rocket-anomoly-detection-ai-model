@@ -1,0 +1,52 @@
+# =========================================
+# PPO Training Configuration
+# =========================================
+
+training:
+  algorithm: "PPO"
+  policy_type: "MlpPolicy"
+  total_timesteps: 2000000
+  log_interval: 10
+  save_path: "models/ppo_rocket_sim"
+  eval_frequency: 10000
+  seed: 42
+
+ppo:
+  learning_rate: 0.0003
+  n_steps: 2048
+  batch_size: 64
+  n_epochs: 10
+  gamma: 0.99
+  gae_lambda: 0.95
+  clip_range: 0.2
+  ent_coef: 0.01
+  vf_coef: 0.5
+  max_grad_norm: 0.5
+
+callbacks:
+  checkpoint_freq: 50000
+  checkpoint_dir: "checkpoints/"
+  early_stopping:
+    enabled: true
+    patience: 10
+    threshold: 0.01
+
+evaluation:
+  episodes: 5
+  deterministic: true
+  render: false
+
+logging:
+  tensorboard_log: "logs/tensorboard/"
+  csv_log: "logs/training_log.csv"
+  save_best_model: true
+  verbose: 1
+
+device:
+  use_gpu: true
+  cuda_device: 0
+
+# =========================================
+# Environment Reference
+# =========================================
+env_config_path: "config/env_config.yaml"

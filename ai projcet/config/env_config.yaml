@@ -1,0 +1,70 @@
+# =========================================
+# Rocket Environment Configuration
+# =========================================
+environment:
+  name: "RocketMissionEnv"
+  version: "1.0"
+  description: "Reinforcement Learning Environment for Rocket Mission Simulation"
+
+  # Observation and Action Spaces
+  observation_space:
+    type: "Box"
+    low: [-1.0, -1.0, -1.0, -1.0, -1.0]
+    high: [1.0, 1.0, 1.0, 1.0, 1.0]
+    features:
+      - altitude
+      - velocity
+      - pitch_angle
+      - fuel_remaining
+      - deviation
+
+  action_space:
+    type: "Box"
+    low: [-1.0, 0.0]            # [-angle adjustment, throttle]
+    high: [1.0, 1.0]
+
+physics:
+  gravity: 9.81
+  air_density: 1.225
+  drag_coefficient: 0.5
+  rocket_cross_section: 0.3
+  thrust_noise: 0.01
+  wind_enabled: false
+  wind_speed_mean: 0.0
+  wind_speed_std: 0.0
+
+rocket:
+  dry_mass: 500.0
+  fuel_mass: 1000.0
+  max_thrust: 1000           # reduce for smoother acceleration
+  burn_rate: 0.03            # lower → engine responds gradually
+  max_angle_change: 2.0      # smaller pitch per step
+
+mission:
+  target_altitude: 10000.0    # meters
+  max_duration: 1000          # timesteps
+  reward_shaping:
+    altitude_reward_weight: 1.0
+    stability_penalty_weight: 0.3
+    fuel_efficiency_weight: 0.2
+    deviation_penalty_weight: 0.5
+    crash_penalty: -100.0
+    success_reward: 200.0
+
+termination:
+  crash_altitude_threshold: 10.0
+  off_course_threshold: 50.0
+  fuel_empty: true
+  time_limit_reached: true
+
+logging:
+  enabled: true
+  log_frequency: 10
+  save_episode_data: true
+  output_dir: "logs/env_logs"
+
+visualization:
+  render_enabled: true
+  render_interval: 5
+  show_trajectory: true
+  color_scheme: "blue"

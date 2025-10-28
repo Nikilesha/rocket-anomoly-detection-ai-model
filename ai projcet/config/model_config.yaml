@@ -1,0 +1,79 @@
+# =========================================
+# Model Configuration
+# =========================================
+model_version: "1.0"
+description: "Configuration file for PPO, LSTM anomaly detection, and Transformer models."
+
+# =========================================
+# Reinforcement Learning Model (PPO)
+# =========================================
+ppo_model:
+  policy_network:
+    layers: [128, 128, 64]
+    activation: "tanh"
+  optimizer:
+    type: "Adam"
+    learning_rate: 0.0003
+  normalization:
+    obs_norm: true
+    reward_norm: true
+  checkpoint:
+    save_dir: "models/ppo/"
+    save_best: true
+    save_freq: 50000
+    filename_pattern: "ppo_checkpoint_step_{step}.zip"
+
+# =========================================
+# Anomaly Detection Models
+# =========================================
+anomaly_detection:
+  lstm:
+    input_size: 8
+    hidden_size: 64
+    num_layers: 2
+    dropout: 0.2
+    bidirectional: false
+    output_size: 1
+    sequence_length: 50
+    optimizer:
+      type: "Adam"
+      learning_rate: 0.001
+    loss_function: "MSELoss"
+    save_path: "models/anomaly_lstm.pt"
+
+  transformer:
+    d_model: 64
+    nhead: 4
+    num_encoder_layers: 3
+    dim_feedforward: 128
+    dropout: 0.1
+    output_size: 1
+    sequence_length: 50
+    optimizer:
+      type: "AdamW"
+      learning_rate: 0.0005
+    loss_function: "MSELoss"
+    save_path: "models/anomaly_transformer.pt"
+
+# =========================================
+# Predictive Maintenance Model
+# =========================================
+predictive_maintenance:
+  model_type: "RandomForest"
+  parameters:
+    n_estimators: 100
+    max_depth: 10
+    min_samples_split: 4
+    random_state: 42
+  feature_importance: true
+  save_path: "models/predictive_maintenance.pkl"
+
+# =========================================
+# Shared Parameters
+# =========================================
+shared:
+  random_seed: 42
+  device: "cuda"   # use "cpu" if no GPU available
+  batch_size: 64
+  num_workers: 4
+  checkpoint_frequency: 50000

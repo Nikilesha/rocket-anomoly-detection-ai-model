@@ -1,0 +1,98 @@
+# =========================================
+# Logging & Monitoring Configuration
+# =========================================
+version: 1.0
+description: "Central logging, monitoring, and checkpointing configuration."
+
+# =========================================
+# Log Directories
+# =========================================
+directories:
+  base_log_dir: "logs/"
+  tensorboard_dir: "logs/tensorboard/"
+  env_logs_dir: "logs/environment/"
+  training_logs_dir: "logs/training/"
+  anomaly_logs_dir: "logs/anomaly/"
+  maintenance_logs_dir: "logs/maintenance/"
+  nlp_logs_dir: "logs/nlp/"
+  checkpoints_dir: "checkpoints/"
+  model_exports_dir: "models/exported/"
+
+# =========================================
+# Log Levels
+# =========================================
+log_levels:
+  default: "INFO"
+  rl_training: "INFO"
+  env_simulation: "DEBUG"
+  anomaly_detection: "INFO"
+  predictive_maintenance: "INFO"
+  nlp_module: "WARNING"
+
+# =========================================
+# File Handlers
+# =========================================
+handlers:
+  console:
+    class: "logging.StreamHandler"
+    level: "INFO"
+    formatter: "color"
+  file:
+    class: "logging.FileHandler"
+    level: "DEBUG"
+    filename: "logs/project.log"
+    formatter: "detailed"
+  error:
+    class: "logging.FileHandler"
+    level: "ERROR"
+    filename: "logs/errors.log"
+    formatter: "detailed"
+
+# =========================================
+# Formatters
+# =========================================
+formatters:
+  color:
+    format: "[%(levelname)s] %(message)s"
+  detailed:
+    format: "%(asctime)s — %(name)s — %(levelname)s — %(message)s"
+
+# =========================================
+# TensorBoard & Metrics
+# =========================================
+metrics:
+  enable_tensorboard: true
+  log_interval: 1000
+  scalar_metrics:
+    - episode_reward
+    - episode_length
+    - loss
+    - accuracy
+    - anomaly_score
+  custom_metrics:
+    - "fuel_efficiency"
+    - "trajectory_error"
+    - "component_health"
+
+# =========================================
+# Checkpointing
+# =========================================
+checkpoints:
+  enabled: true
+  save_best_only: true
+  frequency: 50000
+  retention: 5
+  format: "checkpoint_step_{step}.pt"
+
+# =========================================
+# Notifications (Optional)
+# =========================================
+notifications:
+  enable_email: false
+  email:
+    sender: "noreply@rocket.ai"
+    recipients:
+      - "team@rocketproject.com"
+    smtp_server: "smtp.gmail.com"
+    port: 587
+  enable_desktop_alerts: false
